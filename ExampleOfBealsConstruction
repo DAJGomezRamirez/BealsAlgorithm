@@ -1,0 +1,124 @@
+-- First we do an example in order to illustrate how to use our method.
+
+i1 : load "beal_algorithm.m2";
+
+i2 : R=QQ[x,y];
+
+i3 : L=bealexp(x,y,2,3);
+
+i4 : L
+
+        12 9      9 12      6 15     3 18    21    4 3      6    3 3    6
+o4 = {8x  y  + 20x y   + 18x y   + 7x y   + y  , 2x y  + x*y , 2x y  + y , 2, 6, 7}
+
+o4 : List
+
+-- Now, we check that the list of polynomials that we obtain satisfy Beal's equation in this
+
+-- particular setting.
+
+i11 : a^2==b^6+c^7
+
+o11 = true
+
+-- The next thing we do is to show that all the polynomials obtained as solutions
+
+-- are far from being irreducible just by computing the prime decomposition of the
+
+-- radical ideals attached to it.
+
+i4 : minprimes(ideal(L#0))
+
+                                    2          2           3    3
+o4 = {ideal y, ideal(x + y), ideal(x  - x*y + y ), ideal(2x  + y )}
+
+i5 : minprimes(ideal(L#1))
+
+                                3    3
+o5 = {ideal y, ideal x, ideal(2x  + y )}
+
+i6 : minprimes(ideal(L#2))
+
+                       3    3
+o6 = {ideal y, ideal(2x  + y )}
+
+-- Finally, in this example, we compute the kernel of Barghout's binomial substitution.
+
+i11 : f=map(S,R,matrix{{(u^l+y^l)^n-u^c,y,u}});
+
+o11 : RingMap S <-- R
+
+i12 : ker f
+
+             6     3 3
+o12 = ideal(y  + 2y u  - x)
+
+-- Now, an example with formal power series.
+
+i1 : load "beal_algorithm.m2";
+
+i2 : R=frac(QQ[x,y]);
+
+--Notice that here we are computing with rational functions.
+
+i3 : f=x/(1-x);
+
+i4 : g=y/(1-y);
+
+i5 : v=bealexp(f,g,2,3);
+
+-- Of course, the solutions contained in the vector v are rational functions.
+
+-- Let us check the numerator os these solutions.
+
+i6 : a=v#0;
+
+i7 : b=v#1;
+
+i8 : c=v#2;
+
+i9 : first degree(numerator(a))
+
+o9 = 33
+
+i10 : first degree(numerator(b))
+
+o10 = 10
+
+i11 : first degree(numerator(c))
+
+o11 = 9
+
+i12 : numerator(v#0)
+
+           12 21       12 20       11 21        12 19        11 20       10 21        12 18        11 19        10 20        9 21        12 17  
+o12 = - 54x  y   + 405x  y   + 243x  y   - 1539x  y   - 1377x  y   - 648x  y   + 3807x  y   + 3969x  y   + 2916x  y   + 1188x y   - 6750x  y   -
+      ------------------------------------------------------------------------------------------------------------------------------------------------
+           11 18        10 19        9 20        8 21        12 16        11 17         10 18        9 19        8 20        7 21        12 15  
+      7263x  y   - 6966x  y   - 4104x y   - 1647x y   + 8964x  y   + 9180x  y   + 10692x  y   + 7884x y   + 4266x y   + 1782x y   - 9090x  y   -
+      ------------------------------------------------------------------------------------------------------------------------------------------------
+           11 16         10 17        9 18        8 19        7 20        6 21        12 14        11 15        10 16        9 17        8 18  
+      8208x  y   - 11610x  y   - 9468x y   - 6696x y   - 3294x y   - 1530x y   + 7056x  y   + 5148x  y   + 9180x  y   + 7920x y   + 6282x y   +
+      ------------------------------------------------------------------------------------------------------------------------------------------------
+           7 19        6 20        5 21        12 13        11 14        10 15        9 16        8 17        7 18        6 19       5 20       4 21  
+      4266x y   + 1872x y   + 1044x y   - 4140x  y   - 2160x  y   - 5310x  y   - 4680x y   - 4050x y   - 3042x y   - 2034x y   - 756x y   - 558x y   +
+      ------------------------------------------------------------------------------------------------------------------------------------------------
+           12 12       11 13        10 14        9 15        8 16        7 17       6 18       5 19       4 20       3 21       12 11      11 12  
+      1780x  y   + 540x  y   + 2160x  y   + 2040x y   + 1620x y   + 1620x y   + 948x y   + 756x y   + 189x y   + 227x y   - 528x  y   - 60x  y   -
+      ------------------------------------------------------------------------------------------------------------------------------------------------
+          10 13       9 14       8 15       7 16       6 17       5 18       4 19      3 20      2 21      12 10      10 12       9 13       7 15  
+      540x  y   - 720x y   - 270x y   - 648x y   - 270x y   - 252x y   - 189x y   - 21x y   - 66x y   + 96x  y   + 60x  y   + 180x y   + 108x y   +
+      ------------------------------------------------------------------------------------------------------------------------------------------------
+          6 16      4 18      3 19        21     12 9      9 12      6 15     3 18    21
+      108x y   + 63x y   + 21x y   + 12x*y   - 8x  y  - 20x y   - 18x y   - 7x y   - y
+      
+
+i13 : numerator(v#1)
+
+          4 6     4 5     3 6     4 4     2 6     4 3      6
+o13 = - 3x y  + 6x y  + 3x y  - 6x y  - 3x y  + 2x y  + x*y
+
+i14 : numerator(v#2)
+
+        3 6     3 5     2 6     3 4       6     3 3    6
+o14 = 3x y  - 6x y  - 3x y  + 6x y  + 3x*y  - 2x y  - y
