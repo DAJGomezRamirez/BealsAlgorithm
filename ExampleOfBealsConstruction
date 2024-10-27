@@ -1,3 +1,4 @@
+--Authors Alberto F. Boix and Danny A. J. Gómez-Ramírez in Macaulay 2
 -- First we do an example in order to illustrate how to use our method.
 
 i1 : load "beal_algorithm.m2";
